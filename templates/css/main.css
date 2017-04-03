@@ -1,0 +1,188 @@
+html, body {
+	font-family: sans-serif;
+	font-size: 24px;
+}
+#container {
+	max-width:750px;
+	margin:0 auto;
+	position:relative;
+}
+#help {
+	position:absolute;
+	top:-18px;
+	right:0;
+	width:36px;
+	height: 36px;
+	border-radius: 18px;
+	line-height: 36px;
+	text-align: center;
+	background: #ddd;
+	cursor:pointer;
+}
+#help:after {
+	content:"\00d7";
+}
+#help.hide:after {
+	content:"?";
+}
+#explanation {
+	border: 2px solid #000;
+	border-radius: 18px 0 18px 18px;
+	margin: 36px 18px 20px;
+	padding: 10px;
+}
+#explanation.hide {
+	height:0;
+	padding:0;
+	border:0;
+	margin-bottom:36px;
+	overflow:hidden;
+}
+#explanation p {
+	font-size:16px;
+}
+.empty, .empty div, .voucher {
+	margin-bottom: 20px;
+	height: 36px;
+	text-align: center;
+}
+.empty {
+	position: relative;
+/*	background: #ddd;*/
+	border:2px solid black;
+	border-radius:4px;
+	margin:-4px -4px 16px -4px;
+	padding:2px;
+}
+span.empty {
+	padding:1px;
+	margin:0 1px;
+}
+.minutes {
+	float: left;
+	line-height: 36px;
+}
+.voucher {
+	transition: background 1s ease;
+	position: relative;
+	line-height: 36px;
+}
+.used {
+	background: #d00;
+}
+.active {
+	background: #fb0;
+}
+.open {
+	background: #0d0;
+}
+.available {
+    font-style: italic;
+    color: grey;
+    position: absolute;
+    right: 6px;
+}
+.new {
+	background: #ddd;
+	border-radius: 18px;
+	margin-bottom:0;
+}
+span.new {
+    display: inline-block;
+    padding: 0 10px;
+}
+span.new:before, .new span:before {
+	content:"+";
+}
+.tearoff {
+	position: absolute;
+	border-right: 4px dotted white;
+	line-height: 33px;
+}
+.tearoff span {
+	font-size: 14px;
+	margin: 0 3px;
+	display: inline-block;
+	transform: rotate(-20deg);
+}
+.del, .clock, .cal {
+	position: absolute;
+	height: 30px;
+	width: 30px;
+	right: 3px;
+	top: 3px;
+}
+.del {
+	display:block;
+	background:url(../img/del.png) no-repeat;
+	background-size:100% 100%;
+}
+.voucher .val {
+	position: absolute;
+	right: 36px;
+	font-size: 14px;
+}
+.clock {
+	transform: rotate(-90deg);
+}
+.clock circle {
+	fill: transparent;
+	stroke: #000;
+	stroke-width: 15;
+	animation-timing-function: linear !important;
+}
+@keyframes count-down {
+	100% { stroke-dasharray: 0 47 0; }
+}
+.cal {
+	border: 2px solid #000;
+	border-top: 5px solid #000;
+	border-radius: 0 0 5px;
+	width: 26px;
+	height: 23px;
+	font-family: sans-serif;
+	font-size: 18px;
+	text-align: center;
+	line-height: 24px;
+}
+#add-button {
+	cursor: default;
+}
+#add-button #plus {
+	transition: transform .1s linear;
+	width:36px;
+	margin:0 auto;
+}
+#add-button #plus {
+	display:inline-block;
+}
+#add-button #plus.clicked {
+	transform: rotate(45deg);
+}
+form, input, form button {
+	font-size:20px;
+}
+form {
+	border: 2px solid #000;
+	border-top: 0;
+	border-radius: 0 0 18px 18px;
+	margin: 0 18px 20px;
+	padding: 10px;
+	text-align: center;
+}
+input {
+	border:0;
+	margin:0;
+	text-align:right;
+}
+input[type=number] {
+	border:1px solid grey;
+	width:2em;
+	text-align:left;
+}
+#duration-slider {
+	margin:10px;
+}
+button {
+	margin:0 auto;
+}
