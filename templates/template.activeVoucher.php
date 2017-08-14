@@ -1,5 +1,5 @@
 		<div id="v<?=$_['voucherId']?>" class="active voucher">
-			<div class="tearoff"><span>voucher</span></div>
+			<div class="tearoff"><span>WiFi-code</span></div>
 			<?=$_['voucherCode']?>
 			<span class="val"><?=$_['voucherLength']?></span>
 			<svg class="clock" width="30" height="30">

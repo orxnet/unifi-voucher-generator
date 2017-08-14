@@ -82,9 +82,9 @@ if (isset($_POST['duration'])) {
 }
 	
 Template::show('main', array(
-	'explanationClass' => 'hide', // (count($vouchers) > 0)?'hide':'',
-	'minAvailable'     => min(30, $maxAvailable), 
-	'maxAvailable'     => $maxAvailable,
+	'explanationClass' => (count($vouchers) > 0)?'hide':'',
+	'minAvailable'     => min(30, $maxAvailable),
+	'maxAvailable'     => min($maxAvailable, $oUser->max_length()),
 	'disableSubmit'    => (($maxAvailable == 0) ? true : false),
 	'usedPercentage'   => $oUser->max_minutes() == 0 ? 0 : floor((100 / $oUser->max_minutes()) * $minutes['used']),
 	'activePercentage' => $oUser->max_minutes() == 0 ? 0 : floor((100 / $oUser->max_minutes()) * $minutes['active']),

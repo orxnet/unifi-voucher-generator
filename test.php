@@ -47,13 +47,19 @@ foreach ($hashMapped as $voucher) {
 
 $oLms = new LmsMysql();
 
-$users = $oLms->get_stats(array_keys($vouchers));
+$temp = array();
+$temp[] = 378; // 485;
 
+//$users = $oLms->get_stats(array_keys($vouchers));
+$users = $oLms->get_stats($temp);
+
+var_dump($users[0]['cutoffstop']>time());
+/*
 $data = array_map(function($user) use ($vouchers) {
 	$user['vouchers'] = $vouchers[$user['ownerid']];
 	return $user;
 }, $users);
 
 var_dump($data);
-
+*/
 ?>

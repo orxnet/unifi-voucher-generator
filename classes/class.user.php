@@ -18,7 +18,7 @@ abstract class User {
 			$_SESSION['restricted'] = $db->restricted;
 		}
 		
-		if ($db->user_id == 469) // Herman
+		if ($db->user_id == 469) // Debug
 			return new DefaultUser();
 		
 		if ($db->deleted || $db->user_id === null)
@@ -40,54 +40,66 @@ abstract class User {
 		return $this->user_id;
 	}
 	
-	abstract public function max_quantity();
-	
 	abstract public function max_minutes();
+	
+	abstract public function max_length();
+	
+	abstract public function max_quantity();
 	
 	abstract public function keep_history();
 }
 
 class DefaultUser extends User {
-
-	public function max_quantity() { return DEFAULT_MAX_QUANTITY; }
 	
 	public function max_minutes() { return DEFAULT_MAX_MINUTES; }
+
+	public function max_length() { return DEFAULT_MAX_LENGTH; }
+
+	public function max_quantity() { return DEFAULT_MAX_QUANTITY; }
 	
 	public function keep_history() { return DEFAULT_PERIOD; }
 }
 
 class AdminUser extends User {
+	
+	public function max_minutes() { return ADMIN_MAX_MINUTES; }
 
-	public function max_quantity() { return 50; }
+	public function max_length() { return ADMIN_MAX_LENGTH; }
+
+	public function max_quantity() { return ADMIN_MAX_QUANTITY; }
 	
-	public function max_minutes() { return DEFAULT_MAX_MINUTES; }
-	
-	public function keep_history() { return '0'; }
+	public function keep_history() { return ADMIN_PERIOD; }
 }
 
 class CommissionUser extends User {
-
-	public function max_quantity() { return 20; }
 	
 	public function max_minutes() {	return COMMISSION_MAX_MINUTES; }
+
+	public function max_length() { return COMMISSION_MAX_LENGTH; }
+
+	public function max_quantity() { return COMMISSION_MAX_QUANTITY; }
 	
-	public function keep_history() { return '0'; }
+	public function keep_history() { return COMMISSION_PERIOD; }
 }
 
 class RestrictedUser extends User {
-
-	public function max_quantity() { return RESTRICTED_MAX_QUANTITY; }
 	
 	public function max_minutes() {	return RESTRICTED_MAX_MINUTES; }
+
+	public function max_length() { return RESTRICTED_MAX_LENGTH; }
+
+	public function max_quantity() { return RESTRICTED_MAX_QUANTITY; }
 	
 	public function keep_history() { return RESTRICTED_PERIOD; }
 }
 
 class DeletedUser extends User {
-
-	public function max_quantity() { return 0; }
 	
 	public function max_minutes() {	return 0; }
+
+	public function max_length() { return 0; }
+
+	public function max_quantity() { return 0; }
 	
 	public function keep_history() { return '0'; }
 }

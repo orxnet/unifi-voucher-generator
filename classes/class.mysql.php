@@ -19,7 +19,7 @@ class LmsMysql {
 		}
 
 		$result = $db->query(
-			'select m.ownerid, m.warning, c.deleted, a.tariffid
+			'select m.ownerid, m.warning, c.cutoffstop, c.deleted, a.tariffid
 			from vmacs m
 			inner join customers c on c.id = m.ownerid 
 			left join assignments a on a.customerid = c.id and a.tariffid in (3, 5)
@@ -29,7 +29,7 @@ class LmsMysql {
 		$this->user_id = $info['ownerid'];
 		$this->special_group = $info['tariffid'];
 		$this->deleted = $info['deleted'];
-		$this->restricted = $info['warning'];
+		$this->restricted = ($info['warning'] == 1 && $info['cutoffstop'] <= time());
 	}
 	
 	public function get_stats($user_ids) {
@@ -43,7 +43,7 @@ class LmsMysql {
 		}, $user_ids));
 
 		$result = $db->query(
-			'select m.ownerid, m.warning, c.deleted, c.name, c.lastname, min(a.tariffid) tariffid
+			'select m.ownerid, m.warning, c.cutoffstop, c.deleted, c.name, c.lastname, min(a.tariffid) tariffid
 			from vmacs m
 			inner join customers c on c.id = m.ownerid 
 			left join assignments a on a.customerid = c.id and a.tariffid in (3, 5)

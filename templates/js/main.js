@@ -18,10 +18,10 @@ $(function() {
 		$('#explanation').toggleClass('hide');
 		$('#help').toggleClass('hide');
 	});
-	$('#add-button').click(function() {
+/*	$('#add-button').click(function() {
 		$('#plus').toggleClass('clicked');
 		$('form').toggle('slide', {'direction':'up'});
-	});
+	});*/
 	$('#duration-slider').slider({
 		min: minAvailable,
 		max: maxAvailable,

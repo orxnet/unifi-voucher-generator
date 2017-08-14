@@ -16,7 +16,7 @@ abstract class Voucher {
 	}
 	
 	protected function formattedVoucherCode() {
-		return substr($this->voucher_code, 0, 5) . '-' . substr($this->voucher_code, -5);
+		return substr($this->voucher_code, 0, 5) . ' ' . substr($this->voucher_code, -5);
 	}
 
 	abstract public function show($engine);
