@@ -22,7 +22,7 @@ class LmsMysql {
 			'select m.ownerid, m.warning, c.cutoffstop, c.deleted, a.tariffid
 			from vmacs m
 			inner join customers c on c.id = m.ownerid 
-			left join assignments a on a.customerid = c.id and a.tariffid in (3, 5)
+			left join assignments a on a.customerid = c.id and a.tariffid in (3, 5, 9)
 			where m.ipaddr='.ip2long($_SERVER['REMOTE_ADDR']).'
 			limit 1');
 		$info = $result->fetch_assoc();

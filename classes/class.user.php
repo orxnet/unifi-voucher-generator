@@ -27,9 +27,15 @@ abstract class User {
 		if ($db->restricted)
 			return new RestrictedUser();
 			
+		// can give unlimited short vouchers (eg. dagcafe)
 		if ($db->special_group == 5)
 			return new CommissionUser();
+
+		// can give longer vouchers than others (eg. bar)
+                if ($db->special_group == 9)
+			return new PrivilegedUser();
 		
+		// can give unlimited vouchers
 		if ($db->special_group == 3)
 			return new AdminUser();
 		
@@ -91,6 +97,17 @@ class RestrictedUser extends User {
 	public function max_quantity() { return RESTRICTED_MAX_QUANTITY; }
 	
 	public function keep_history() { return RESTRICTED_PERIOD; }
+}
+
+class PrivilegedUser extends User {
+	
+	public function max_minutes() {	return PRIVILEGED_MAX_MINUTES; }
+
+	public function max_length() { return PRIVILEGED_MAX_LENGTH; }
+
+	public function max_quantity() { return PRIVILEGED_MAX_QUANTITY; }
+	
+	public function keep_history() { return PRIVILEGED_PERIOD; }
 }
 
 class DeletedUser extends User {
