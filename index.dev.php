@@ -2,7 +2,6 @@
 session_start();
 
 require('settings.php');
-require('usersettings.php');
 
 // I wanted to have 1 file `voucher` with all voucher classes so decided to have the
 // autoload filename of a class be the last CamelCase "word" of the class name
@@ -82,9 +81,6 @@ foreach ($vouchers as $voucher) {
 
 Template::show('main', array(
 	'explanationClass' => (count($vouchers) > 0)?'hide':'',
-	'showExplanation'  => function() use ($oUser) {
-		$oUser->showExplanation('Template');
-	},
 	'minAvailable'     => min(30, $maxAvailable),
 	'maxAvailable'     => min($maxAvailable, $oUser->max_length()),
 	'disableSubmit'    => (($maxAvailable <= 0) ? true : false),
@@ -99,4 +95,5 @@ Template::show('main', array(
 	'keepHistory'     => substr($oUser->keep_history(), 0, strpos($oUser->keep_history(), ' ')),
 	'timeoutsJson'    => json_encode($timeouts))
 );
+echo('<!-- DEV -->');
 ?>

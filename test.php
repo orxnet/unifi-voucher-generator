@@ -25,10 +25,9 @@ $vouchers = array();
 foreach ($voucherJson as $voucher) {
 	if (!isset($voucher->note)) continue;
 	if (!$embeddedJson = json_decode($voucher->note, true)) continue;
-	if ($voucher->status != 'EXPIRED') {
+	if ($voucher->status == 'EXPIRED') continue;
 	//	var_dump($voucher);
-		$hashMapped[$voucher->_id] = $voucher;
-	}
+	$hashMapped[$voucher->_id] = $voucher;
 }
 
 foreach ($usedAuthJson as $auth) {
@@ -47,19 +46,52 @@ foreach ($hashMapped as $voucher) {
 
 $oLms = new LmsMysql();
 
-$temp = array();
-$temp[] = 378; // 485;
+//$temp = array();
+//$temp[] = 378; // 485;
 
-//$users = $oLms->get_stats(array_keys($vouchers));
-$users = $oLms->get_stats($temp);
+$users = $oLms->get_stats(array_keys($vouchers));
+//$users = $oLms->get_stats($temp);
 
-var_dump($users[0]['cutoffstop']>time());
-/*
+//var_dump($users[0]['cutoffstop']>time());
+//*
 $data = array_map(function($user) use ($vouchers) {
 	$user['vouchers'] = $vouchers[$user['ownerid']];
 	return $user;
 }, $users);
 
-var_dump($data);
-*/
+//var_dump($data);
+//*/
+?>
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>WiFi-code self-service beheer</title>
+		<style type="text/css">
+			.used {
+				background: #d00;
+			}
+			.active {
+				background: #fb0;
+			}
+			.open {
+				background: #0d0;
+			}
+			.temp {
+				background: #df0;
+			}
+		</style>
+	</head>
+
+	<body>
+<?
+echo('<table>');
+foreach ($data as $user) {
+	echo('<tr><th>' . $user['name'] . ' ' . $user['lastname'] . '</th>');
+	foreach ($user['vouchers'] as $voucher) {
+		echo('<td class="'.$voucher->getType().'">' . Voucher::min2hm($voucher->getDuration()) . '</td>');
+	}
+	echo('</tr>');
+}
+echo('</table></body></html>');
+
 ?>

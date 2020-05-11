@@ -19,7 +19,11 @@ abstract class User {
 		}
 		
 		if ($db->user_id == 469) // Debug
-			return new DefaultUser();
+			return new AdminUser();
+		
+		// can give unlimited vouchers
+		if ($db->special_group == 3)
+			return new AdminUser();
 		
 		if ($db->deleted || $db->user_id === null)
 			return new DeletedUser();
@@ -32,12 +36,8 @@ abstract class User {
 			return new CommissionUser();
 
 		// can give longer vouchers than others (eg. bar)
-                if ($db->special_group == 9)
+		if ($db->special_group == 9)
 			return new PrivilegedUser();
-		
-		// can give unlimited vouchers
-		if ($db->special_group == 3)
-			return new AdminUser();
 		
 		return new DefaultUser();
 	}
@@ -53,6 +53,8 @@ abstract class User {
 	abstract public function max_quantity();
 	
 	abstract public function keep_history();
+	
+	abstract public function showExplanation($engine);
 }
 
 class DefaultUser extends User {
@@ -64,6 +66,12 @@ class DefaultUser extends User {
 	public function max_quantity() { return DEFAULT_MAX_QUANTITY; }
 	
 	public function keep_history() { return DEFAULT_PERIOD; }
+	
+	public function voucher_expires() { return DEFAULT_EXPIRATION; }
+	
+	public function showExplanation($engine) {
+		$engine::show('defaultExplanation', array());
+	}
 }
 
 class AdminUser extends User {
@@ -75,6 +83,12 @@ class AdminUser extends User {
 	public function max_quantity() { return ADMIN_MAX_QUANTITY; }
 	
 	public function keep_history() { return ADMIN_PERIOD; }
+	
+	public function voucher_expires() { return ADMIN_EXPIRATION; }
+	
+	public function showExplanation($engine) {
+		$engine::show('defaultExplanation', array());
+	}
 }
 
 class CommissionUser extends User {
@@ -86,6 +100,12 @@ class CommissionUser extends User {
 	public function max_quantity() { return COMMISSION_MAX_QUANTITY; }
 	
 	public function keep_history() { return COMMISSION_PERIOD; }
+	
+	public function voucher_expires() { return COMMISSION_EXPIRATION; }
+	
+	public function showExplanation($engine) {
+		$engine::show('commissionExplanation', array());
+	}
 }
 
 class RestrictedUser extends User {
@@ -97,6 +117,12 @@ class RestrictedUser extends User {
 	public function max_quantity() { return RESTRICTED_MAX_QUANTITY; }
 	
 	public function keep_history() { return RESTRICTED_PERIOD; }
+	
+	public function voucher_expires() { return RESTRICTED_EXPIRATION; }
+	
+	public function showExplanation($engine) {
+		$engine::show('defaultExplanation', array());
+	}
 }
 
 class PrivilegedUser extends User {
@@ -108,6 +134,12 @@ class PrivilegedUser extends User {
 	public function max_quantity() { return PRIVILEGED_MAX_QUANTITY; }
 	
 	public function keep_history() { return PRIVILEGED_PERIOD; }
+	
+	public function voucher_expires() { return PRIVILEGED_EXPIRATION; }
+	
+	public function showExplanation($engine) {
+		$engine::show('defaultExplanation', array());
+	}
 }
 
 class DeletedUser extends User {
@@ -119,5 +151,11 @@ class DeletedUser extends User {
 	public function max_quantity() { return 0; }
 	
 	public function keep_history() { return '0'; }
+	
+	public function voucher_expires() { return '0'; }
+	
+	public function showExplanation($engine) {
+		$engine::show('defaultExplanation', array());
+	}
 }
 ?>

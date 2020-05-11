@@ -35,7 +35,7 @@ class LmsMysql {
 	public function get_stats($user_ids) {
 		$db = new mysqli($this->server, $this->username, $this->password, $this->database);
 		if ($db->connect_errno) {
-			  die('could not connect: ' . $db->connect_error());
+			die('could not connect: ' . $db->connect_error());
 		}
 		
 		$in = implode(', ', array_map(function($uid) {
@@ -43,12 +43,12 @@ class LmsMysql {
 		}, $user_ids));
 
 		$result = $db->query(
-			'select m.ownerid, m.warning, c.cutoffstop, c.deleted, c.name, c.lastname, min(a.tariffid) tariffid
+			'select m.ownerid, max(m.warning) warning, c.cutoffstop, c.deleted, c.name, c.lastname, min(a.tariffid) tariffid
 			from vmacs m
 			inner join customers c on c.id = m.ownerid 
-			left join assignments a on a.customerid = c.id and a.tariffid in (3, 5)
+			left join assignments a on a.customerid = c.id and a.tariffid in (3, 5, 9)
 			where c.id in ('.$in.')
-			group by m.ownerid, m.warning, c.deleted, c.name, c.lastname');
+			group by m.ownerid, c.deleted, c.name, c.lastname');
 		
 		$ret = array();
 		

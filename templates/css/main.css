@@ -48,7 +48,6 @@ html, body {
 }
 .empty {
 	position: relative;
-/*	background: #ddd;*/
 	border:2px solid black;
 	border-radius:4px;
 	margin:-4px -4px 16px -4px;
@@ -75,6 +74,9 @@ span.empty {
 }
 .open {
 	background: #0d0;
+}
+.temp {
+	background: #df0;
 }
 .available {
     font-style: italic;
@@ -111,6 +113,15 @@ span.new:before, .new span:before {
 	width: 30px;
 	right: 3px;
 	top: 3px;
+}
+.temp .del {
+	display: none;
+}
+.temp:hover .del {
+	display: block;
+}
+.temp:hover .clock {
+	visibility: hidden;
 }
 .del {
 	display:block;

@@ -33,13 +33,16 @@ abstract class Voucher {
 		return $this->duration;
 	}
 	
-	public static function fromAuth($auth_json) {
+	public static function fromAuth($auth_json, $keep_history = 30) {
 		if ($auth_json->end > time())
 			return new ActiveVoucher($auth_json);
-		return new UsedVoucher($auth_json);
+		return new UsedVoucher($auth_json, $keep_history);
 	}
 	
 	public static function fromVoucher($voucher_json) {
+		$embeddedJson = json_decode($voucher_json->note, true);
+		if (isset($embeddedJson['Expires']))
+			return new TempVoucher($voucher_json, $embeddedJson['Expires']);
 		return new OpenVoucher($voucher_json);
 	}
 }
@@ -49,12 +52,12 @@ class UsedVoucher extends Voucher {
 	private $auth_json;
 	private $days_left;
 	
-	public function __construct($auth_json) {
+	public function __construct($auth_json, $keep_history = 30) {
 		$this->duration  = ($auth_json->end - $auth_json->start) / 60;
 		$this->voucher_code = $auth_json->voucher_code;
 		$this->voucher_id = $auth_json->voucher_id;
 		
-		$this->days_left = round(30 - (time() - $auth_json->end) / (3600 * 24));
+		$this->days_left = ceil($keep_history - (time() - $auth_json->end) / (3600 * 24));
 		$this->auth_json = $auth_json;
 	}
 	
@@ -137,6 +140,42 @@ class OpenVoucher extends Voucher {
 	
 	public function getSecRemaining() {
 		return $this->duration * 60;
+	}
+}
+
+class TempVoucher extends Voucher {
+
+	private $voucher_json;
+	private $start;
+	private $end;
+	
+	public function __construct($voucher_json, $expires) {
+		$this->duration = $voucher_json->duration;
+		$this->voucher_code = $voucher_json->code;
+		$this->voucher_id = $voucher_json->_id;
+		$this->start = $voucher_json->create_time;
+		$this->end = $expires;
+		
+		$this->voucher_json = $voucher_json;
+	}
+	
+	public function show($engine) {
+		$clockDone = round((time() - $this->start) / ($this->end - $this->start) * $engine::$CLOCK_DASH_TOTAL);
+		$engine::show('tempVoucher', array(
+			'voucherCode'   => $this->formattedVoucherCode(),
+			'voucherLength' => $this->min2hm($this->duration),
+			'clockDash'     => $clockDone.' '.($engine::$CLOCK_DASH_TOTAL-$clockDone),
+			'secRemaining'  => $this->getSecRemaining(),
+			'voucherId'     => $this->voucher_id
+		));
+	}
+	
+	public function getType() {
+		return 'temp';
+	}
+	
+	public function getSecRemaining() {
+		return max(0, $this->end - time()); // * 60;
 	}
 }
 

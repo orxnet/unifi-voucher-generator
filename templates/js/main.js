@@ -6,11 +6,18 @@ function min2hm(min) {
 }
 function voucherUsed(voucher, secs) {
 	setTimeout(function () {
-		$('#'+voucher)
-			.toggleClass('active')
-			.toggleClass('used')
-			.children('svg')
-			.replaceWith('<div class="cal">30</div>');
+		if ($('#'+voucher).hasClass('active')) {
+			$('#'+voucher)
+				.toggleClass('active')
+				.toggleClass('used')
+				.children('svg')
+				.replaceWith('<div class="cal">' + keepHistory + '</div>');
+		} else if ($('#'+voucher).hasClass('temp')) {
+			$('#'+voucher+' .del')
+				.off('click')
+				.get(0)
+				.click();
+		}
 	}, secs*1000);
 }
 $(function() {
@@ -23,12 +30,13 @@ $(function() {
 		$('form').toggle('slide', {'direction':'up'});
 	});*/
 	$('#duration-slider').slider({
-		min: minAvailable,
+		min: 0,
 		max: maxAvailable,
 		disabled: disableSubmit,
-		value: 0,
+		value: minAvailable,
 		step: 30,
 		slide: function(event, ui) {
+			$('form button').prop('disabled', ui.value <= 0);
 			$('#duration').val(min2hm(ui.value));
 		}
 	});
